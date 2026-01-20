@@ -469,7 +469,7 @@ export default function App() {
       navigator.vibrate([30, 30, 30]);
     }
 
-    const animationDuration = reducedMotion ? 150 : 850;
+    const animationDuration = reducedMotion ? 150 : Math.floor(Math.random() * 2001) + 3000;
 
     window.setTimeout(() => {
       const newItems = drawGadgets(drawCount);

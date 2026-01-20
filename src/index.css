@@ -85,21 +85,21 @@
     transform: rotate(0deg) scale(1);
   }
   20% {
-    transform: rotate(-4deg) scale(1.03);
+    transform: rotate(-10deg) scale(1.1);
   }
   40% {
-    transform: rotate(4deg) scale(1.03);
+    transform: rotate(10deg) scale(1.1);
   }
   60% {
-    transform: rotate(-3deg) scale(1.02);
+    transform: rotate(-6deg) scale(1.05);
   }
   80% {
-    transform: rotate(3deg) scale(1.02);
+    transform: rotate(6deg) scale(1.05);
   }
 }
 
 .pocket-shake {
-  animation: pocket-shake 0.6s ease-in-out infinite;
+  animation: pocket-shake 0.5s ease-in-out infinite;
 }
 
 @keyframes pocket-pop {
@@ -136,9 +136,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pocket-shake,
-  .pocket-pop,
-  .pocket-float {
+  /*
+    说明：当系统启用“减少动态效果”时，默认关闭动画。
+    但如果用户显式强制开启动画（HTML 标签上存在 data-force-motion="true"），
+    则允许动画继续播放，用于修复某些环境下系统偏好误报为 reduce 的情况。
+  */
+  :root:not([data-force-motion="true"]) .pocket-shake,
+  :root:not([data-force-motion="true"]) .pocket-pop,
+  :root:not([data-force-motion="true"]) .pocket-float {
     animation: none !important;
+    transition: none !important;
   }
 }

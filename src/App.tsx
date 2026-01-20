@@ -464,17 +464,26 @@ export default function App() {
     setShowTip(false);
     setIsShaking(true);
 
+    if (reducedMotion) {
+      document.documentElement.setAttribute("data-force-motion", "true");
+    }
+
     // 有些设备支持震动；减少动态效果时不触发
     if (!reducedMotion && navigator.vibrate) {
       navigator.vibrate([30, 30, 30]);
     }
 
-    const animationDuration = reducedMotion ? 150 : Math.floor(Math.random() * 2001) + 3000;
+    // 动画时长：至少 2 秒以上 (2000ms ~ 3000ms)
+    const animationDuration = Math.floor(Math.random() * 1001) + 2000;
 
     window.setTimeout(() => {
       const newItems = drawGadgets(drawCount);
       setInventory((prev) => [...newItems, ...prev]);
       setIsShaking(false);
+
+      if (reducedMotion) {
+        document.documentElement.removeAttribute("data-force-motion");
+      }
 
       // 默认弹出本次第一件道具的说明
       window.setTimeout(
@@ -513,7 +522,7 @@ export default function App() {
               onClick={openPocket}
               className={
                 "relative z-10 flex h-72 w-72 select-none flex-col items-center justify-center rounded-full border-4 border-black bg-white shadow-[16px_16px_0px_0px_rgba(0,163,255,1)] transition-transform duration-200 hover:-translate-y-2 hover:shadow-[22px_22px_0px_0px_rgba(0,163,255,1)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-400/70 active:translate-y-1 active:shadow-[6px_6px_0px_0px_rgba(0,163,255,1)] " +
-                (!reducedMotion && isShaking ? "pocket-shake" : "")
+                (isShaking ? "pocket-shake" : "")
               }
               aria-label="打开口袋，抽取道具"
             >
@@ -576,7 +585,6 @@ export default function App() {
               onClick={clearPocket}
               className="rounded-full border-2 border-black bg-white px-4 py-2 text-sm font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-400/70 active:translate-y-0"
               disabled={inventory.length === 0}
-              aria-disabled={inventory.length === 0}
             >
               清空口袋
             </button>
